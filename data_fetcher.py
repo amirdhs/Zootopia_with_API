@@ -1,11 +1,12 @@
 import requests
 import os
 from dotenv import load_dotenv
-
-
 load_dotenv()
+
+
 API_KEY = os.getenv('API_KEY')
-print(API_KEY)
+
+
 def fetch_data(animal_name):
   """
   Fetches the animals data for the animal 'animal_name'.
@@ -23,4 +24,15 @@ def fetch_data(animal_name):
     }
   },
   """
-  pass
+  api_url = 'https://api.api-ninjas.com/v1/animals?name={}'.format(animal_name)
+  response = requests.get(api_url, headers={'X-Api-Key': API_KEY})
+  if response.status_code == requests.codes.ok:
+     animal_info = response.json()
+     return animal_info
+  else:
+    print("Error:", response.status_code, response.text)
+
+
+with open("animals_data.json","w") as file:
+  file.write(fetch_data("cheetah"))
+  print("information successfully write")
