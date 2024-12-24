@@ -15,4 +15,3 @@ def fetch_data(animal_name):
     }
   },
   """
-  pass
