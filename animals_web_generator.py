@@ -8,7 +8,7 @@ def generate_html(data, animal_name):
         <style>
             body {
                 font-family: Arial, sans-serif;
-                background-color: #f4f4f9;
+                background-color: #EFF3EA;
                 color: #333;
                 margin: 20px;
                 padding: 20px;
