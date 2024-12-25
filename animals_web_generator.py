@@ -2,7 +2,7 @@ from data_fetcher import fetch_data
 
 
 def generate_html(data, animal_name):
-    html_content = """
+    html_content = """ 
     <html>
     <head>
         <style>
