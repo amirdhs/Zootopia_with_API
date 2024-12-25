@@ -1,51 +1,31 @@
-import data_fetcher
-import json
+from data_fetcher import fetch_data
 
 
-def load_data(name):
-    """Loads a data from API."""
-    animal_info = data_fetcher.fetch_data(name)
-    return animal_info
-
-for animal in animal_info:
-      animal_name = animal["name"]
-      taxonomy = animal["taxonomy"]
-      locations = animal["locations"]
-      characteristics = animal["characteristics"]
-
-user =  input("Enter Animal Name: ")
-
-def serialize_animal(animal_obj):
-    """Serializes an animal object into an HTML list item."""
-    output = ''
-    output += f"<li class='cards__item'>\n"
-    output += f'  <div class="card__title">{animal_name}</div>\n'
-    output += f'  <p class="card__text">\n'
-    output += f"    <strong>Diet: </strong>{animal_obj['characteristics']['diet']}<br/>\n"
-    output += f"    <strong>Location: </strong>{animal_obj['locations'][0]}<br/>\n"
-    if 'type' in animal_obj['characteristics']:
-        output += f"    <strong>Type: </strong>{animal_obj['characteristics']['type']}<br/>\n"
-    output += f"  </p>\n"
-    output += f"</li>\n"
-    return output
-
-def main():
-    animals_data = load_data('animals_data.json')
-    output = ""
-    for animal in animals_data:
-        output += serialize_animal(animal)
-
-    with open("animals_template.html", "r") as template_file:
-        template_html = template_file.read()
-
-    updated_html = template_html.replace("__REPLACE_ANIMALS_INFO__", output)
-
-    with open("animals.html", "w") as output_file:
-        output_file.write(updated_html)
-
-    print("HTML file updated successfully!")
+def generate_html(data, animal_name):
+    html_content = "<html><body>\n"
+    if data:
+        if len(data) == 0:
+            html_content += f"<h2>The animal '{animal_name}' doesn't exist.</h2>"
+        else:
+            for animal in data:
+                html_content += f"<h2>{animal['name']}</h2>\n"
+                html_content += "<ul>\n"
+                html_content += f"<li>Taxonomy: {animal['taxonomy']}</li>\n"
+                html_content += f"<li>Locations: {', '.join(animal['locations'])}</li>\n"
+                html_content += f"<li>Characteristics: {animal['characteristics']}</li>\n"
+                html_content += "</ul>\n"
+    else:
+        html_content += f"<h2>The animal '{animal_name}' doesn't exist.</h2>\n"
+    html_content += "</body></html>"
+    return html_content
 
 
+animal_name = input("Enter a name of an animal: ")
+data = fetch_data(animal_name)
 
-if __name__ == "__main__":
-    main()
+# Write to animals.html
+if data is not None:
+    html_content = generate_html(data, animal_name)
+    with open("animals.html", "w") as file:
+        file.write(html_content)
+    print("Website was successfully generated to the file animals.html.")

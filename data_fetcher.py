@@ -1,38 +1,29 @@
 import requests
 import os
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
 
+# Check if the API key is loaded
+if not API_KEY:
+    raise ValueError("API_KEY is not set in the .env file!")
 
 def fetch_data(animal_name):
-  """
-  Fetches the animals data for the animal 'animal_name'.
-  Returns: a list of animals, each animal is a dictionary:
-  {
-    'name': ...,
-    'taxonomy': {
-      ...
-    },
-    'locations': [
-      ...
-    ],
-    'characteristics': {
-      ...
-    }
-  },
-  """
-  api_url = 'https://api.api-ninjas.com/v1/animals?name={}'.format(animal_name)
-  response = requests.get(api_url, headers={'X-Api-Key': API_KEY})
-  if response.status_code == requests.codes.ok:
-     animal_info = response.json()
-     return animal_info
-  else:
-    print("Error:", response.status_code, response.text)
+    """
+    Fetches the animal data for the specified 'animal_name'.
+    Returns: a list of animals, where each animal is a dictionary:
+    """
+    api_url = f'https://api.api-ninjas.com/v1/animals?name={animal_name}'
+    try:
+        response = requests.get(api_url, headers={'X-Api-Key': API_KEY})
+        animal_info = response.json()
+        return animal_info
+    except requests.exceptions.RequestException as e:
+        print("Error fetching data:", e)
+        return None
 
 
-with open("animals_data.json","w") as file:
-  file.write(fetch_data("cheetah"))
-  print("information successfully write")
+
+
