@@ -42,12 +42,16 @@ def generate_html(data, animal_name):
             for animal in data:
                 html_content += f"<h2>{animal['name']}</h2>"
                 html_content += "<ul>"
-                html_content += f"<li><strong>Taxonomy:</strong> {animal['taxonomy']}</li>"
-                html_content += f"<li><strong>Locations:</strong> {', '.join(animal['locations'])}</li>"
-                html_content += f"<li><strong>Diet:</strong> {animal['characteristics']['diet']}</li>"
+                if 'taxonomy' in animal['characteristics']:
+                    html_content += f"<li><strong>Taxonomy:</strong> {animal['taxonomy']}</li>"
+                if 'locations' in animal['characteristics']:
+                    html_content += f"<li><strong>Locations:</strong> {', '.join(animal['locations'])}</li>"
+                if 'diet' in animal['characteristics']:
+                    html_content += f"<li><strong>Diet:</strong> {animal['characteristics']['diet']}</li>"
                 if 'type' in animal['characteristics']:
                     html_content += f"<li><strong>Type:</strong> {animal['characteristics']['type']}</li>"
-                html_content += f"<li><strong>Skin Type:</strong> {animal['characteristics']['skin_type']}</li>"
+                if 'skin_type' in animal['characteristics']:
+                    html_content += f"<li><strong>Skin Type:</strong> {animal['characteristics']['skin_type']}</li>"
                 if 'common_name' in animal['characteristics']:
                     html_content += f"<li><strong>Common name:</strong> {animal['characteristics']['common_name']}</li>"
                 html_content += "</ul>"
